@@ -23,12 +23,13 @@ export function CountryItem({
   flag,
 }: CountryProps) {
   return (
-    <GridItem boxShadow="md">
+    <GridItem boxShadow="md" borderRadius={4}>
       <Image
         src={flag}
         alt={`Bandeira ${country}`}
         height="180px"
         width="100%"
+        objectFit="cover"
       />
       <VStack py={6} px={4} alignItems="flex-start">
         <Heading as="h2" fontSize={16}>
