@@ -23,24 +23,27 @@ export function CountryItem({
   flag,
 }: CountryProps) {
   return (
-    <SimpleGrid spacing={4} columns={4}>
-      <GridItem>
-        <Image src={flag} alt={`Bandeira ${country}`} />
-        <VStack py={6} px={4} alignItems="flex-start">
-          <Heading as="h2" fontSize={16}>
-            {country}
-          </Heading>
-          <Text fontSize={12}>
-            <strong>Population</strong>: {population}
-          </Text>
-          <Text fontSize={12}>
-            <strong>Region</strong>: {region}
-          </Text>
-          <Text fontSize={12}>
-            <strong>Capital</strong>: {capital}
-          </Text>
-        </VStack>
-      </GridItem>
-    </SimpleGrid>
+    <GridItem boxShadow="md">
+      <Image
+        src={flag}
+        alt={`Bandeira ${country}`}
+        height="180px"
+        width="100%"
+      />
+      <VStack py={6} px={4} alignItems="flex-start">
+        <Heading as="h2" fontSize={16}>
+          {country}
+        </Heading>
+        <Text fontSize={12}>
+          <strong>Population</strong>: {population}
+        </Text>
+        <Text fontSize={12}>
+          <strong>Region</strong>: {region}
+        </Text>
+        <Text fontSize={12}>
+          <strong>Capital</strong>: {capital}
+        </Text>
+      </VStack>
+    </GridItem>
   );
 }
