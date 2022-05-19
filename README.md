@@ -1,4 +1,4 @@
-# Rest-Couentrie
+# Rest-Countrie
 
 Projeto em desenvolvimento, branch principal apenas atualizada quando estiver com features estáveis, commits sendo realizados no decorrer do desenvolvimento na branch 'development'.
 
