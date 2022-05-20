@@ -1,20 +1,5 @@
-import {
-  GridItem,
-  Heading,
-  Image,
-  SimpleGrid,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
-
-interface CountryProps {
-  country: string;
-  population: number;
-  region: string;
-  capital: string;
-  flag: string;
-  onClick: () => void;
-}
+import { GridItem, Heading, Image, Text, VStack } from "@chakra-ui/react";
+import { CountryProps } from "../../types/countryItem";
 
 export function CountryItem({
   country,

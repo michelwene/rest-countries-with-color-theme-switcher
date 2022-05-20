@@ -1,7 +1,7 @@
 import {
   Box,
   Flex,
-  Grid,
+  Grid as ChakraGrid,
   Input,
   InputGroup,
   InputLeftElement,
@@ -15,17 +15,7 @@ import { api } from "../services/api";
 import { AiOutlineSearch } from "react-icons/ai";
 import Router from "next/router";
 import useDebounce from "../hooks/useDebounce";
-
-type CountryData = {
-  name: string;
-  capital: string;
-  population: number;
-  region: string;
-  flags: {
-    svg: string;
-  };
-  alpha3Code: string;
-};
+import { CountryData } from "../types/home";
 
 export default function Home() {
   const [countries, setCountries] = useState<CountryData[]>([]);
@@ -42,6 +32,7 @@ export default function Home() {
       });
       setCountries(data);
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedValue]);
 
   useEffect(() => {
@@ -69,10 +60,6 @@ export default function Home() {
     }
   }
 
-  const regionsFilter = Array.from(
-    new Set(regions.map((regions) => regions.region))
-  );
-
   async function handleRegionChange(
     event: React.ChangeEvent<HTMLSelectElement>
   ) {
@@ -83,6 +70,10 @@ export default function Home() {
     });
     setCountries(data);
   }
+
+  const regionsFilter = Array.from(
+    new Set(regions.map((regions) => regions.region))
+  );
 
   return (
     <Box as="section" mx="auto">
@@ -122,7 +113,7 @@ export default function Home() {
             ))}
           </Select>
         </Flex>
-        <Grid my={8}>
+        <ChakraGrid my={8}>
           <SimpleGrid spacing={16} columns={[1, 2, 3, 4]}>
             {countries.map((country) => (
               <CountryItem
@@ -138,7 +129,7 @@ export default function Home() {
               />
             ))}
           </SimpleGrid>
-        </Grid>
+        </ChakraGrid>
       </Box>
     </Box>
   );

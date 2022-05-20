@@ -13,29 +13,7 @@ import { useRouter } from "next/router";
 import { api } from "../../services/api";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { type } from "os";
-
-type CountryData = {
-  flag: string;
-  name: string;
-  nativeName: string;
-  population: number;
-  region: string;
-  subregion: string;
-  capital: string;
-  topLevelDomain: string[];
-  currencies: [
-    {
-      name: string;
-    }
-  ];
-  languages: [
-    {
-      name: string;
-    }
-  ];
-  borders: string[];
-};
+import { CountryData } from "../../types/country";
 
 type CountryBorders = {
   borders: string[];
