@@ -5,7 +5,13 @@ export function Header() {
   const { colorMode, toggleColorMode } = useColorMode();
   return (
     <Flex as="header" p={4} boxShadow="md">
-      <Flex justifyContent="space-between" width="90vw" mx="auto">
+      <Flex
+        justifyContent="space-between"
+        width="90vw"
+        mx="auto"
+        align={["center"]}
+        columnGap={[8, 0]}
+      >
         <Heading as="h1">Where in the world</Heading>
         <Button onClick={toggleColorMode} leftIcon={<FiMoon />} variant="ghost">
           {colorMode === "light" ? "Dark" : "Light"} Mode

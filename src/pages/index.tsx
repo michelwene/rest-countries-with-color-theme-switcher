@@ -92,7 +92,13 @@ export default function Home() {
     <Box as="section" mx="auto">
       <Header />
       <Box width="90vw" mx="auto" mt={8}>
-        <Flex justifyContent="space-between">
+        <Flex
+          align={["center", "center", "flex-start"]}
+          justifyContent={["space-between"]}
+          flexDirection={["column", "row"]}
+          rowGap={[8, 0]}
+          columnGap={[0, 8, 0]}
+        >
           <InputGroup onKeyUp={() => handleSearch()}>
             <InputLeftElement pointerEvents="none" as="a">
               <AiOutlineSearch size="1.5rem" />
@@ -121,7 +127,7 @@ export default function Home() {
           </Select>
         </Flex>
         <Grid my={8}>
-          <SimpleGrid spacing={16} columns={4}>
+          <SimpleGrid spacing={16} columns={[1, 2, 3, 4]}>
             {countries.map((country) => (
               <CountryItem
                 key={country.name}
