@@ -12,8 +12,10 @@ import { BsArrowLeft } from "react-icons/bs";
 import { useRouter } from "next/router";
 import { api } from "../../services/api";
 import { useState } from "react";
+import Link from "next/link";
 
 type CountryData = {
+  flag: string;
   name: string;
   nativeName: string;
   population: number;
@@ -40,7 +42,7 @@ export default function Country() {
 
   (async () => {
     const { data } = await api.get(`/alpha/${query.code}`);
-    console.log(data);
+    setCountry(data);
   })();
 
   return (
@@ -53,54 +55,92 @@ export default function Country() {
         spacing={16}
         mt={16}
       >
-        <Button leftIcon={<BsArrowLeft />}>Back</Button>
-        <Flex>
-          <Image src="" alt={`Bandeira`} />
-          <Box>
-            <Heading as="h2">Belgium</Heading>
-            <Flex>
-              <Box>
+        <Link href="/" passHref>
+          <Button leftIcon={<BsArrowLeft />}>Back</Button>
+        </Link>
+        <Flex gap={32} align="center">
+          <Image
+            src={country?.flag}
+            alt={`Bandeira ${country?.name}`}
+            width="40%"
+          />
+          <Box height="100%">
+            <Heading as="h2" mb={8}>
+              Belgium
+            </Heading>
+            <Flex gap={32} mb={16}>
+              <Flex flexDirection="column" gap={2}>
                 <Text>
                   <strong>Native Name: </strong>
-                  Belgiê
+                  {country?.nativeName}
                 </Text>
                 <Text>
                   <strong>Population: </strong>
-                  11.319.511
+                  {country?.population}
                 </Text>
                 <Text>
                   <strong>Region: </strong>
-                  Europe
+                  {country?.region}
                 </Text>
                 <Text>
                   <strong>SubsRegion: </strong>
-                  Western Europe
+                  {country?.subregion}
                 </Text>
                 <Text>
                   <strong>Capital: </strong>
-                  Brussels
+                  {country?.capital}
                 </Text>
-              </Box>
-              <Box>
+              </Flex>
+              <Flex flexDirection="column" gap={2}>
                 <Text>
                   <strong>Top Level Domain: </strong>
-                  .be
+                  {country?.topLevelDomain}
                 </Text>
                 <Text>
                   <strong>Currencies: </strong>
-                  Euro
+                  {country?.currencies?.map((currency) => currency.name)}
                 </Text>
                 <Text>
                   <strong>Languages: </strong>
-                  Dutch, French, German
+                  {country?.languages?.map((language) => language.name)}
                 </Text>
-              </Box>
+              </Flex>
             </Flex>
-            <Flex>
-              <Text>Border Countries</Text>
-              <Text>France</Text>
-              <Text>Germany</Text>
-              <Text>Netherlands</Text>
+            <Flex gap={4} align="center" flex="1">
+              <Text fontWeight={700}>Border Countries: </Text>
+              <Text
+                textAlign="center"
+                border="1px"
+                borderColor="gray.200"
+                py={1}
+                width="150px"
+                borderRadius={4}
+                boxShadow="md"
+              >
+                France
+              </Text>
+              <Text
+                textAlign="center"
+                border="1px"
+                borderColor="gray.200"
+                py={1}
+                width="150px"
+                borderRadius={4}
+                boxShadow="md"
+              >
+                Germany
+              </Text>
+              <Text
+                textAlign="center"
+                border="1px"
+                borderColor="gray.200"
+                py={1}
+                width="150px"
+                borderRadius={4}
+                boxShadow="md"
+              >
+                Netherlands
+              </Text>
             </Flex>
           </Box>
         </Flex>
