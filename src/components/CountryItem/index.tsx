@@ -13,6 +13,7 @@ interface CountryProps {
   region: string;
   capital: string;
   flag: string;
+  onClick: () => void;
 }
 
 export function CountryItem({
@@ -21,15 +22,22 @@ export function CountryItem({
   region,
   capital,
   flag,
+  onClick,
 }: CountryProps) {
   return (
-    <GridItem boxShadow="md" borderRadius={4}>
+    <GridItem
+      boxShadow="md"
+      borderRadius={4}
+      cursor="pointer"
+      onClick={onClick}
+    >
       <Image
         src={flag}
         alt={`Bandeira ${country}`}
         height="180px"
         width="100%"
         objectFit="cover"
+        borderTopRadius={4}
       />
       <VStack py={6} px={4} alignItems="flex-start">
         <Heading as="h2" fontSize={16}>

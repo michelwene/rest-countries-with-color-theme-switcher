@@ -5,16 +5,15 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  MenuItemOption,
   Select,
   SimpleGrid,
-  Text,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { CountryItem } from "../components/CountryItem";
 import { Header } from "../components/Header";
 import { api } from "../services/api";
 import { AiOutlineSearch } from "react-icons/ai";
+import Router from "next/router";
 
 type CountryData = {
   name: string;
@@ -30,17 +29,31 @@ export default function Home() {
   const [countries, setCountries] = useState<CountryData[]>([]);
   const [regions, setRegions] = useState<CountryData[]>([]);
   const [search, setSearch] = useState("");
+
   useEffect(() => {
     (async () => {
       const { data } = await api.get("/all");
+      data.map((country: any) => {
+        country.population = country.population.toLocaleString();
+        return country;
+      });
       setCountries(data);
       setRegions(data);
     })();
   }, []);
 
   async function handleSearch() {
+    if (!search.trim()) {
+      return;
+    }
+
     try {
       const { data } = await api.get(`/name/${search}`);
+      data.map((country: any) => {
+        country.population = country.population.toLocaleString();
+        return country;
+      });
+      setCountries(data);
     } catch (err) {
       console.log(err);
     }
@@ -49,6 +62,10 @@ export default function Home() {
   async function handleRefetchCountries() {
     try {
       const { data } = await api.get("/all");
+      data.map((country: any) => {
+        country.population = country.population.toLocaleString();
+        return country;
+      });
       setCountries(data);
     } catch (err) {
       console.log(err);
@@ -63,6 +80,10 @@ export default function Home() {
     event: React.ChangeEvent<HTMLSelectElement>
   ) {
     const { data } = await api.get(`/region/${event.target.value}`);
+    data.map((country: any) => {
+      country.population = country.population.toLocaleString();
+      return country;
+    });
     setCountries(data);
   }
 
@@ -71,13 +92,10 @@ export default function Home() {
       <Header />
       <Box width="90vw" mx="auto" mt={8}>
         <Flex justifyContent="space-between">
-          <InputGroup>
-            <InputLeftElement
-              pointerEvents="none"
-              // eslint-disable-next-line react/no-children-prop
-              children={<AiOutlineSearch />}
-              cursor="pointer"
-            />
+          <InputGroup onKeyUp={() => handleSearch()}>
+            <InputLeftElement pointerEvents="none" as="a">
+              <AiOutlineSearch size="1.5rem" />
+            </InputLeftElement>
             <Input
               placeholder="Search for a country"
               maxWidth="300px"
@@ -111,6 +129,9 @@ export default function Home() {
                 region={country.region}
                 country={country.name}
                 flag={country.flags.svg}
+                onClick={() => {
+                  Router.push(`/country/${country.name}`);
+                }}
               />
             ))}
           </SimpleGrid>
