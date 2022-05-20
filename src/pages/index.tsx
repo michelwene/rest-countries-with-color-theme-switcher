@@ -23,6 +23,7 @@ type CountryData = {
   flags: {
     svg: string;
   };
+  alpha3Code: string;
 };
 
 export default function Home() {
@@ -130,7 +131,7 @@ export default function Home() {
                 country={country.name}
                 flag={country.flags.svg}
                 onClick={() => {
-                  Router.push(`/country/${country.name}`);
+                  Router.push(`/country/${country.alpha3Code}`);
                 }}
               />
             ))}
