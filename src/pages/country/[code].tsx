@@ -11,8 +11,9 @@ import { Header } from "../../components/Header";
 import { BsArrowLeft } from "react-icons/bs";
 import { useRouter } from "next/router";
 import { api } from "../../services/api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { type } from "os";
 
 type CountryData = {
   flag: string;
@@ -36,42 +37,72 @@ type CountryData = {
   borders: string[];
 };
 
+type CountryBorders = {
+  borders: string[];
+};
+
+type CountriesName = {
+  name: string;
+};
+
 export default function Country() {
   const [country, setCountry] = useState<CountryData>();
+  const [nameCountry, setNameCountry] = useState<CountriesName[]>([]);
   const { query } = useRouter();
 
-  (async () => {
-    const { data } = await api.get(`/alpha/${query.code}`);
-    setCountry(data);
-  })();
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await api.get(`/alpha/${query.code}`);
+        setCountry(data);
+        searchCountries(data);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, [query.code]);
+
+  async function searchCountries(value: CountryBorders) {
+    try {
+      const { data } = await api.get(`/alpha?codes=${value.borders}`);
+      setNameCountry(data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   return (
     <Box as="section" height={["100vh"]}>
       <Header />
       <VStack
-        width={["100vw", "90vw"]}
+        width={["95vw", "90vw"]}
         mx="auto"
-        alignItems="flex-start"
+        alignItems={["center", "center", "center", "flex-start"]}
         spacing={16}
         mt={16}
       >
         <Link href="/" passHref>
           <Button leftIcon={<BsArrowLeft />}>Back</Button>
         </Link>
-        <Flex gap={32} align="center" flexDirection={["column"]} pb={8}>
+        <Flex
+          gap={[4, 8, 16, 32]}
+          align="center"
+          flexDirection={["column", "column", "column", "row"]}
+          pb={8}
+        >
           <Image
             src={country?.flag}
             alt={`Bandeira ${country?.name}`}
-            width="40%"
+            width={["100%", "80%", "80%", "40%"]}
           />
           <Box height="100%">
             <Heading as="h2" mb={8} textAlign={["center", "left"]}>
-              Belgium
+              {country?.name}
             </Heading>
             <Flex
               gap={[16, 32]}
               mb={16}
-              flexDirection={["column"]}
+              flexDirection={["column", "column", "column", "row"]}
               align={["flex-start", "flex-start"]}
             >
               <Flex flexDirection="column" gap={2}>
@@ -81,7 +112,7 @@ export default function Country() {
                 </Text>
                 <Text>
                   <strong>Population: </strong>
-                  {country?.population}
+                  {country?.population.toLocaleString()}
                 </Text>
                 <Text>
                   <strong>Region: </strong>
@@ -107,45 +138,43 @@ export default function Country() {
                 </Text>
                 <Text>
                   <strong>Languages: </strong>
-                  {country?.languages?.map((language) => language.name)}
+                  {country?.languages?.map((language) => language.name + " ")}
                 </Text>
               </Flex>
             </Flex>
-            <Flex gap={4} align="center" flex="1" flexDirection={["column"]}>
-              <Text fontWeight={700}>Border Countries: </Text>
-              <Text
-                textAlign="center"
-                border="1px"
-                borderColor="gray.200"
-                py={1}
-                width="150px"
-                borderRadius={4}
-                boxShadow="md"
+            <Flex
+              gap={4}
+              align={["center"]}
+              flex="1"
+              flexDirection={["column"]}
+            >
+              <Box>
+                <Text fontWeight={700}>Border Countries: </Text>
+              </Box>
+              <Flex
+                gap={4}
+                flexDirection={["column", "row"]}
+                wrap={"wrap"}
+                justifyContent="center"
               >
-                France
-              </Text>
-              <Text
-                textAlign="center"
-                border="1px"
-                borderColor="gray.200"
-                py={1}
-                width="150px"
-                borderRadius={4}
-                boxShadow="md"
-              >
-                Germany
-              </Text>
-              <Text
-                textAlign="center"
-                border="1px"
-                borderColor="gray.200"
-                py={1}
-                width="150px"
-                borderRadius={4}
-                boxShadow="md"
-              >
-                Netherlands
-              </Text>
+                {nameCountry?.map((country) => (
+                  <>
+                    <Box key={country.name}>
+                      <Text
+                        textAlign="center"
+                        border="1px"
+                        borderColor="gray.200"
+                        py={1}
+                        width="150px"
+                        borderRadius={4}
+                        boxShadow="md"
+                      >
+                        {country.name}
+                      </Text>
+                    </Box>
+                  </>
+                ))}
+              </Flex>
             </Flex>
           </Box>
         </Flex>

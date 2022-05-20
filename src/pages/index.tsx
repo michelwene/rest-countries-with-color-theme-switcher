@@ -14,6 +14,7 @@ import { Header } from "../components/Header";
 import { api } from "../services/api";
 import { AiOutlineSearch } from "react-icons/ai";
 import Router from "next/router";
+import useDebounce from "../hooks/useDebounce";
 
 type CountryData = {
   name: string;
@@ -30,6 +31,18 @@ export default function Home() {
   const [countries, setCountries] = useState<CountryData[]>([]);
   const [regions, setRegions] = useState<CountryData[]>([]);
   const [search, setSearch] = useState("");
+  const debouncedValue = useDebounce<string>(search, 500);
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await api.get(`/name/${search}`);
+      data.map((country: any) => {
+        country.population = country.population.toLocaleString();
+        return country;
+      });
+      setCountries(data);
+    })();
+  }, [debouncedValue]);
 
   useEffect(() => {
     (async () => {
@@ -42,23 +55,6 @@ export default function Home() {
       setRegions(data);
     })();
   }, []);
-
-  async function handleSearch() {
-    if (!search.trim()) {
-      return;
-    }
-
-    try {
-      const { data } = await api.get(`/name/${search}`);
-      data.map((country: any) => {
-        country.population = country.population.toLocaleString();
-        return country;
-      });
-      setCountries(data);
-    } catch (err) {
-      console.log(err);
-    }
-  }
 
   async function handleRefetchCountries() {
     try {
@@ -99,7 +95,7 @@ export default function Home() {
           rowGap={[8, 0]}
           columnGap={[0, 8, 0]}
         >
-          <InputGroup onKeyUp={() => handleSearch()}>
+          <InputGroup>
             <InputLeftElement pointerEvents="none" as="a">
               <AiOutlineSearch size="1.5rem" />
             </InputLeftElement>
