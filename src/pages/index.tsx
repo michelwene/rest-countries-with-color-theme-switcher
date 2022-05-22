@@ -46,6 +46,7 @@ export default function Home() {
         console.log(err);
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedValue]);
 
   useEffect(() => {
