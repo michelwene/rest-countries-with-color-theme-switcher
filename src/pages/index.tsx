@@ -35,24 +35,32 @@ export default function Home() {
 
   useEffect(() => {
     (async () => {
-      const { data } = await api.get(`/name/${search}`);
-      data.map((country: any) => {
-        country.population = country.population.toLocaleString();
-        return country;
-      });
-      setCountries(data);
+      try {
+        const { data } = await api.get(`/name/${search}`);
+        data.map((country: any) => {
+          country.population = country.population.toLocaleString();
+          return country;
+        });
+        setCountries(data);
+      } catch (err) {
+        console.log(err);
+      }
     })();
   }, [debouncedValue]);
 
   useEffect(() => {
     (async () => {
-      const { data } = await api.get("/all");
-      data.map((country: any) => {
-        country.population = country.population.toLocaleString();
-        return country;
-      });
-      setCountries(data);
-      setRegions(data);
+      try {
+        const { data } = await api.get("/all");
+        data.map((country: any) => {
+          country.population = country.population.toLocaleString();
+          return country;
+        });
+        setCountries(data);
+        setRegions(data);
+      } catch (err) {
+        console.log(err);
+      }
     })();
   }, []);
 
@@ -76,12 +84,16 @@ export default function Home() {
   async function handleRegionChange(
     event: React.ChangeEvent<HTMLSelectElement>
   ) {
-    const { data } = await api.get(`/region/${event.target.value}`);
-    data.map((country: any) => {
-      country.population = country.population.toLocaleString();
-      return country;
-    });
-    setCountries(data);
+    try {
+      const { data } = await api.get(`/region/${event.target.value}`);
+      data.map((country: any) => {
+        country.population = country.population.toLocaleString();
+        return country;
+      });
+      setCountries(data);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
